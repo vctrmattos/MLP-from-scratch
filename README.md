@@ -1,1 +1,1 @@
-# MLP-almost-from-scratch
+# MLP-from-scratch
