@@ -6,9 +6,8 @@ from nasc import *
 import pickle
 from keras.datasets import mnist
 from keras.utils import np_utils
+from plot_model import plot_model
 
-# n_train = 30000
-# n_val   = 10000
 epochs  = 30
 learning_rate = 0.007
 #Main file for model training on MNIST dataset
@@ -21,22 +20,22 @@ def mnist_acc(y_test:Matrix, predictions:list):
             cont += 1
     return cont/len(predictions)
 
-(x_train, y_train), (x_val, y_val) = mnist.load_data()
+# (x_train, y_train), (x_val, y_val) = mnist.load_data()
 
-# x_train, y_train, x_val, y_val = x_train[:n_train], y_train[:n_train], x_val[:n_val], y_val[:n_val]
+# # x_train, y_train, x_val, y_val = x_train[:n_train], y_train[:n_train], x_val[:n_val], y_val[:n_val]
 
-# reshape and normalize input data
-x_train = x_train.reshape(x_train.shape[0], 28*28)
-x_train = x_train.astype('float32')
-x_train /= 255
+# # reshape and normalize input data
+# x_train = x_train.reshape(x_train.shape[0], 28*28)
+# x_train = x_train.astype('float32')
+# x_train /= 255
 
 # encode output which is a number in range [0,9] into a vector of size 10
 # e.g. number 3 will become [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
-y_train = np_utils.to_categorical(y_train)
-x_val = x_val.reshape(x_val.shape[0], 28*28)
-x_val = x_val.astype('float32')
-x_val /= 255
-y_val = np_utils.to_categorical(y_val)
+# y_train = np_utils.to_categorical(y_train)
+# x_val = x_val.reshape(x_val.shape[0], 28*28)
+# x_val = x_val.astype('float32')
+# x_val /= 255
+# y_val = np_utils.to_categorical(y_val)
 
 net = Network()
 net.add_layer(DenseLayer(28*28, 16, relu, "random", "random"))
@@ -63,3 +62,6 @@ t3 = time.time()
 
 print("Training duration:", t1 - t0,"\nTotal duration:", t3 - t2)
 print("Data length:", x_train.size, "Learning rate: ", learning_rate, ", Epochs: ", epochs )
+
+#uncomment the line below if you want to plot the training params
+# plot_model(params)

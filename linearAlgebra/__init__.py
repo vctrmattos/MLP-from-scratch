@@ -1,11 +1,4 @@
-# - Transposta -> Carolina
-# - Inicializador de matriz com valores diferentes e iguais -> Victor
-# - random variables (usar uma parte da hora como seed para inicializar a variável) -> Carolina
-# mse -> Victor
-# - Alpha fixo no início, depois implementa uma otimizador
-
-from calendar import c
-import random_gen as random
+import random
 
 class Matrix:
     def __init__(self, array):
@@ -135,7 +128,7 @@ class Matrix:
         a = Matrix.zeros(dims)
         for i in range(dims[0]):
             for j in range(dims[1]):
-                a[i,j] = random.extract_number()
+                a[i,j] = random.gauss(0, 1)
         return a
 
     def mean(self):

@@ -1,0 +1,4 @@
+dataset
+MNIST *
+.ipynb_c*
+__pycache__
