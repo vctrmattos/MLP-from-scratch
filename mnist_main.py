@@ -7,6 +7,8 @@ import pickle
 from keras.datasets import mnist
 from keras.utils import np_utils
 from plot_model import plot_model
+from dataset import *
+from activation import Activation
 
 epochs  = 30
 learning_rate = 0.007
@@ -20,38 +22,43 @@ def mnist_acc(y_test:Matrix, predictions:list):
             cont += 1
     return cont/len(predictions)
 
-# (x_train, y_train), (x_val, y_val) = mnist.load_data()
+#Download the MNIST dataset
+# get_mnist()
 
-# # x_train, y_train, x_val, y_val = x_train[:n_train], y_train[:n_train], x_val[:n_val], y_val[:n_val]
+# Read 
+xy_test = read_dataset("testing",   0.01)
+xy_train = read_dataset("training", 0.01)
 
-# # reshape and normalize input data
-# x_train = x_train.reshape(x_train.shape[0], 28*28)
-# x_train = x_train.astype('float32')
-# x_train /= 255
+#Shuffle
+x_test, y_test = shuffle_dataset(xy_test)
+x_train, y_train = shuffle_dataset(xy_train)
 
-# encode output which is a number in range [0,9] into a vector of size 10
-# e.g. number 3 will become [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
-# y_train = np_utils.to_categorical(y_train)
-# x_val = x_val.reshape(x_val.shape[0], 28*28)
-# x_val = x_val.astype('float32')
-# x_val /= 255
-# y_val = np_utils.to_categorical(y_val)
+x_test  = [i/255 for i in x_test]
+x_train = [i/255 for i in x_train]
+
+#to categorical e.g. number 3 will become [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
+
+
+y_test = to_categorical(y_test)
+y_train = to_categorical(y_train)
 
 net = Network()
-net.add_layer(DenseLayer(28*28, 16, relu, "random", "random"))
-net.add_layer(DenseLayer(16, 16, relu, "random", "random"))
-net.add_layer(DenseLayer(16, 10, sigmoid, "random", "random"))
+net.add_layer(DenseLayer(28*28, 16, "random", "random"))
+net.add_layer(Activation(relu))
+net.add_layer(DenseLayer(16, 16, "random", "random"))
+net.add_layer(Activation(relu))
+net.add_layer(DenseLayer(16, 10, "random", "random"))
+net.add_layer(Activation(sigmoid))
 net.set_loss(mse)
 
 t0 = time.time()
 
-x_train, y_train, x_val, y_val = Matrix(x_train.tolist()), Matrix(y_train.tolist()), Matrix(x_val.tolist()), Matrix(y_val.tolist())
 params = net.fit_and_test(x_train, y_train, epochs=epochs, learning_rate=learning_rate, iter_step=1) 
 
 t1 = time.time()
 
-pred_val = net.predict(x_val)
-print("validation: ", mnist_acc(y_val, pred_val))
+pred_test = net.predict(x_test)
+print("test: ", mnist_acc(y_test, pred_test))
 pred_train = net.predict(x_train)
 print("train: ", mnist_acc(y_train, pred_train))
 

@@ -1,6 +1,6 @@
 from dense_layer import DenseLayer
 from linearAlgebra import Matrix
-from network import Network
+from network_graph import Network
 from activation import Activation
 from nasc import *
 
@@ -31,7 +31,7 @@ net.add_layer(DenseLayer(50, 1, "random", "random"))
 net.add_layer(Activation(relu))
 
 net.set_loss(mse)
-params = net.fit_and_test(x_train, y_train, x_val=x_train, y_val=y_train, epochs=2000, progression=True, learning_rate=0.01, acc_fun=xor_acc, iter_step=100) 
+params = net.fit_and_test(x_train, y_train, x_test=x_train, y_test=y_train, epochs=2000, progression=True, learning_rate=0.01, acc_fun=xor_acc, iter_step=100) 
 
 out = net.predict(x_train)
 print(out)

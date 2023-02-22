@@ -23,7 +23,7 @@ def get_mnist():
 def read_dataset(mode:str, p: float):
     
     dataset_folder = os.path.join("./dataset/mnist_png", mode)
-    x_y = []
+    xy = []
 
     for y_i in range(10):
         dir = os.path.join(dataset_folder, str(y_i))
@@ -43,21 +43,28 @@ def read_dataset(mode:str, p: float):
                     pixel_value = image.getpixel((w, h))
                     row_data.append(pixel_value)
                 pixel_data.append(row_data)
-            x_y.append((pixel_data, y_i))
+            xy.append((pixel_data, y_i))
             count += 1 
             
             if count == selected_images:
                 break
 
-    return x_y
+    return xy
 
-def shuffle_dataset(x_y):
-    random.shuffle(x_y)
+def shuffle_dataset(xy):
+    random.shuffle(xy)
     x = []
     y = []
 
-    for i, j in x_y:
+    for i, j in xy:
         x.append(i)
         y.append(j)
 
     return x, y
+
+def to_categorical(y):
+    categorical = Matrix.zeros((len(y), 10))
+    for i in range(len(y)):
+        categorical[i, y[i]] = 1
+
+    return categorical
