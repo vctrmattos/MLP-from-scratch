@@ -4,3 +4,4 @@ MNIST *
 __pycache__
 get_mnist.ipynb
 a.ipynb
+models
