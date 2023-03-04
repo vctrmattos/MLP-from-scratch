@@ -43,7 +43,7 @@ def read_dataset(mode:str, p: float):
                     pixel_value = image.getpixel((w, h))
                     row_data.append(pixel_value)
                 pixel_data.append(row_data)
-            xy.append((pixel_data, y_i))
+            xy.append((Matrix(pixel_data), y_i))
             count += 1 
             
             if count == selected_images:
@@ -68,3 +68,10 @@ def to_categorical(y):
         categorical[i, y[i]] = 1
 
     return categorical
+
+def mnist_acc(y_test:Matrix, predictions:list): 
+    cont = 0
+    for i in range(len(predictions)):
+        if predictions[i].index(max(predictions[i])) == y_test[i].array[0].index(max(y_test[i].array[0])):
+            cont += 1
+    return cont/len(predictions)

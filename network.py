@@ -12,8 +12,7 @@ class Network:
         self.layers.append(layer)
     
     def predict(self, input_data):
-        # sample dimension first
-        samples = input_data.rows
+        samples = len(input_data)
         result = []
 
         # run network over all samples
@@ -24,8 +23,6 @@ class Network:
                 output = layer.forward_propagation(output)
             result.extend(output.array)
         return result
-    
-    # Calculate accuracy percentage between two lists
 
 
     def set_loss(self, loss):
@@ -33,9 +30,9 @@ class Network:
         self.loss_d = self.loss_dict[self.loss]
 
     # train the network
-    def fit_and_test(self, x_train, y_train, x_test, y_test, epochs, learning_rate, acc_fun=None, progression=False, iter_step=5):
+    def fit_and_test(self, x_train, y_train, epochs, learning_rate, x_test=None, y_test=None, acc_fun=None, progression=False, iter_step=5):
         # sample dimension first
-        samples = x_train.rows
+        samples = len(x_train)
         params = {
                     "error":[], 
                     "acc_train":[], 
@@ -52,10 +49,7 @@ class Network:
                 for layer in self.layers:
                     output = layer.forward_propagation(output)
 
-                # compute loss (for display purpose only)
-                
-                # Alpha dinamico --> self.loss(y_train[j], output)
-
+                #compute loss
                 err += self.loss(y_train[j], output)
                 
 
@@ -65,17 +59,12 @@ class Network:
                     error = layer.backward_propagation(error, learning_rate)
                     
                     if progression and not (cont % iter_step):
-                        #cont+=1
                         y_predicted = self.predict(x_train)
                         acc_train = acc_fun(y_train, y_predicted)
 
                         y_test_predicted = self.predict(x_test)
                         acc_test  = acc_fun(y_test, y_test_predicted)
-                        
-                        # params["acc_train"].append(acc_train)
-                        # params["acc_test"].append(acc_test)
-                        # params["epoch"].append(i + 1)
-                        # params["error"].append(err)
+                       
 
             # calculate average error on all samples
             err /= samples
