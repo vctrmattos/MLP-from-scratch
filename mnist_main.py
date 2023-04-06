@@ -1,4 +1,5 @@
 from dense_layer import DenseLayer
+from activation import Activation
 from linearAlgebra import Matrix
 from network import Network
 from dataset import *
@@ -17,8 +18,8 @@ t2 = time.time()
 # get_mnist()
 
 # Read 
-xy_test = read_dataset("testing",   1)
-xy_train = read_dataset("training", 1)
+xy_test = read_dataset("testing",   0.01)
+xy_train = read_dataset("training", 0.01)
 
 #Shuffle
 x_test, y_test = shuffle_dataset(xy_test)
@@ -32,9 +33,12 @@ y_test = to_categorical(y_test)
 y_train = to_categorical(y_train)
 
 net = Network()
-net.add_layer(DenseLayer(28*28, 16, relu, "random", "random"))
-net.add_layer(DenseLayer(16, 16, relu, "random", "random"))
-net.add_layer(DenseLayer(16, 10, sigmoid, "random", "random"))
+net.add_layer(DenseLayer(28*28, 16, "random", "random"))
+net.add_layer(Activation(relu))
+net.add_layer(DenseLayer(16, 16, "random", "random"))
+net.add_layer(Activation(relu))
+net.add_layer(DenseLayer(16, 10, "random", "random"))
+net.add_layer(Activation(sigmoid))
 net.set_loss(mse)
 
 t0 = time.time()
